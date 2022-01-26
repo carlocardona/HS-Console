@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "dotenv": "^14.3.2",
-    "hellosign-sdk": "^2.0.0"
+    "hellosign-sdk": "^2.0.0",
+    "inquirer": "^8.2.0"
   },
   "devDependencies": {},
   "scripts": {
