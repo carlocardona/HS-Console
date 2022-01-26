@@ -4,20 +4,32 @@ const hellosign = require ('hellosign-sdk')({key: process.env.CC_TEST_API_KEY})
 
 inquirer.prompt([
     {
-        type:"input",
-        message:"Choose 1",
-        name:"choice"
+        type:'list',
+        name:'input',
+        message:'HS Console Menu',
+        choices:['Account','Other GET Requests']
     }
 ]).then(function(res){
 
-    if (res.choice === '1'){
+    switch ( res.input ){
+        case 'Account':
+            hellosign.account.get().then((res) => {
+                    console.log(res);
+                }).catch((err) => {
+                console.log(err);
+                })
+            break;
 
-        console.log("Response 1 Hit");
-        hellosign.account.get().then((res) => {
-            console.log(res);
+        case 'Other GET Requests':
+            otherGET();
+            break;
 
-        }).catch((err) => {
-            console.log(err);
-        })
+        default:
+            break;
     }
-})
+   
+});
+
+function otherGET() {
+    console.log("Other Get Called")
+}
