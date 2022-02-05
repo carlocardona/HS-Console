@@ -33,113 +33,78 @@ inquirer
     }
   });
 
-  function signatureRequest () {
+  function signatureRequest() {
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "input",
+          message: "--- Signature Request ---",
+          choices: [
+            "Send Signature Request with File",
+            "Send Signature Request with Template",
+          ],
+        },
+      ])
+      .then(function (res) {
+        switch (res.input) {
+          case "Send Signature Request with File":
+            let optionsSigReqFile = {
+              test_mode: 1,
+              clientId: "3b358187f617211a875a1e410117371c",
+              title: "NDA with Acme Co.",
+              subject: "The NDA we talked about",
+              message:
+                "Please sign this NDA and then we can discuss more. Let me know if you have any questions.",
+              signers: [
+                {
+                  email_address: "carlocardona@dropbox.com",
+                  name: "Jack",
+                },
+              ],
+              files: ["Demo-TwoSign-NDA.pdf"],
+            };
 
-    inquirer.prompt([
-      {
-        type:'list',
-        name: 'input',
-        message: '--- Signature Request ---',
-        choices: ['Send Signature Request']
-      }
-    ]).then(function (res) {
+            hellosign.signatureRequest
+              .createEmbedded(optionsSigReqFile)
+              .then(function (res) {
+                console.log(res.signature_request);
+              });
+            break;
 
-      switch (res.input){
-
-        case 'Send Signature Request':
-          var options = {
-            test_mode: 1,
-            clientId: "3b358187f617211a875a1e410117371c",
-            title: "NDA with Acme Co.",
-            subject: "The NDA we talked about",
-            message:
-              "Please sign this NDA and then we can discuss more. Let me know if you have any questions.",
-            signers: [
+          case "Send Signature Request with Template":
+            let signersSigReqTemp = [
               {
                 email_address: "carlocardona@dropbox.com",
-                name: "Jack",
+                name: "George",
+                role: "Signer",
               },
-            ],
-            files: ["Demo-TwoSign-NDA.pdf"],
-          };
-  
-          hellosign.signatureRequest.createEmbedded(options).then(function (res) {
-            console.log(res.signature_request);
-          });
-          break;
+            ];
 
-        default:
-          break;
+            let optionsSigReqTemp = {
+              test_mode: 1,
+              template_id: "d6ec4e2fefb73f556f7176c82a5d3299cfc214eb",
+              subject: "Student Agreement Form",
+              message: "Welcome, and congratulations!",
+              signers: signersSigReqTemp,
+              custom_fields: [
+                {
+                  name: "start_date",
+                  value: "01/10/2016",
+                  editor: "Signer",
+                  required: true,
+                },
+              ],
+            };
 
-      }
+            hellosign.signatureRequest
+              .sendWithTemplate(optionsSigReqTemp)
+              .then(function (res) {
+                console.log(res.signature_request);
+              });
 
-    })
+          default:
+            break;
+        }
+      });
   }
-
-// function otherGET() {
-//   const opts = {
-//     test_mode: 1,
-//   };
-
-//   inquirer
-//     .prompt([
-//       {
-//         type: "list",
-//         name: "otherGET",
-//         message: "Other Get Requests",
-//         choices: ["Sign  URL", "Signature Request", "Template", "API App"],
-//       },
-//     ])
-//     .then(function (res) {
-//       switch (res.otherGET) {
-//         case "Sign  URL":
-//           hellosign.signatureRequest
-//             .createEmbedded(opts)
-//             .then((res) => {
-//               const signature = res.signature_request.signatures[0];
-//               const signatureId = signature.signature_id;
-
-//               return hellosign.embedded.getSignUrl(signatureId);
-//             })
-//             .then((res) => {
-//               console.log("The Sign URL: " + res.embedded.sign_url);
-//             })
-//             .catch((err) => {
-//               console.log(err);
-//             });
-//           break;
-//         case "Signature Request":
-//           console.log("Signature Request");
-
-//           inquirer
-//             .prompt([
-//               {
-//                 type: "input",
-//                 name: "signatureRequest",
-//                 message: "Enter Signature Request ID: ",
-//               },
-//             ])
-//             .then(function (res) {
-//               let signatureRequestId = res.signatureRequest;
-//               hellosign.signatureRequest
-//                 .get(signatureRequestId)
-//                 .then((res) => {
-//                   console.log(res);
-//                 })
-//                 .catch((err) => {
-//                   console.log(err);
-//                 });
-//             });
-
-//           break;
-//         case "Template":
-//           console.log("Template");
-//           break;
-//         case "API App":
-//           console.log("API App");
-//           break;
-//         default:
-//           break;
-//       }
-//     });
-// }
