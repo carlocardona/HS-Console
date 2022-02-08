@@ -46,6 +46,7 @@ inquirer
             "Send Signature Request with Template",
             "Send Signature Request with Ordered Signers",
             "Cancel Incomplete Signature Request",
+            "Signature Request Reminder",
           ],
         },
       ])
@@ -144,15 +145,26 @@ inquirer
             break;
 
           case "Cancel Incomplete Signature Request":
-            let request_id = "fa5c8a0b0f492d768749333ad6fcc214c111e967";
+            let request_id_incomplete_sigReq =
+              "fa5c8a0b0f492d768749333ad6fcc214c111e967";
             hellosign.signatureRequest
-              .cancel(request_id)
+              .cancel(request_id_incomplete_sigReq)
               .then(function (response) {
                 console.log(response.statusCode);
                 console.log(response.statusMessage);
               })
               .catch(function (err) {
                 console.log(err);
+              });
+
+          case "Signature Request Reminder":
+            var request_id_sigReq_remind =
+              "fa5c8a0b0f492d768749333ad6fcc214c111e967";
+            var email = "thedude@abides.com";
+            hellosign.signatureRequest
+              .remind(request_id_sigReq_remind, { email_address: email })
+              .then(function (res) {
+                console.log(res.signature_request);
               });
 
           default:
