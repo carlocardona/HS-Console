@@ -44,6 +44,8 @@ inquirer
             "Send Signature Request with File",
             "Send Signature Request with Signer Fields",
             "Send Signature Request with Template",
+            "Send Signature Request with Ordered Signers",
+            "Cancel Incomplete Signature Request",
           ],
         },
       ])
@@ -136,6 +138,22 @@ inquirer
                 console.log(res.signature_request);
               });
             break;
+
+          case "Send Signature Request with Ordered Signers":
+            console.log("Test");
+            break;
+
+          case "Cancel Incomplete Signature Request":
+            let request_id = "fa5c8a0b0f492d768749333ad6fcc214c111e967";
+            hellosign.signatureRequest
+              .cancel(request_id)
+              .then(function (response) {
+                console.log(response.statusCode);
+                console.log(response.statusMessage);
+              })
+              .catch(function (err) {
+                console.log(err);
+              });
 
           default:
             break;
