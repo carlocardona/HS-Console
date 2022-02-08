@@ -42,6 +42,7 @@ inquirer
           message: "--- Signature Request ---",
           choices: [
             "Send Signature Request with File",
+            "Send Signature Request with Signer Fields",
             "Send Signature Request with Template",
           ],
         },
@@ -72,12 +73,12 @@ inquirer
               });
             break;
 
-          case "Send Signature Request with Template":
+          case "Send Signature Request with Signer Fields":
             let signersSigReqTemp = [
               {
                 email_address: "carlocardona@dropbox.com",
                 name: "George",
-                role: "Signer",
+                role: "Student",
               },
             ];
 
@@ -91,7 +92,7 @@ inquirer
                 {
                   name: "start_date",
                   value: "01/10/2016",
-                  editor: "Signer",
+                  editor: "Student",
                   required: true,
                 },
               ],
@@ -102,6 +103,39 @@ inquirer
               .then(function (res) {
                 console.log(res.signature_request);
               });
+            break;
+
+          case "Send Signature Request with Template":
+            var signersRequestWTemplate = [
+              {
+                email_address: "george@example.com",
+                name: "George",
+                role: "Student",
+              },
+            ];
+
+            var optionsRequestWTemplate = {
+              test_mode: 1,
+              template_id: "d6ec4e2fefb73f556f7176c82a5d3299cfc214eb",
+              subject: "Student Agreement Form",
+              message: "Glad we could come to an agreement.",
+              signers: signersRequestWTemplate,
+              custom_fields: [
+                {
+                  name: "start_date",
+                  value: "01/10/2016",
+                  editor: "Student",
+                  required: true,
+                },
+              ],
+            };
+
+            hellosign.signatureRequest
+              .sendWithTemplate(optionsRequestWTemplate)
+              .then(function (res) {
+                console.log(res.signature_request);
+              });
+            break;
 
           default:
             break;
